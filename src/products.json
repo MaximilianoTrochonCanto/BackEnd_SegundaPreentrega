@@ -1,0 +1,51 @@
+{
+    "products": [
+        {
+            "id": "1",
+            "title": "Vaporeso",
+            "description": "Next GEN GTI4",
+            "code": "WDF9231",
+            "price": 1800,
+            "status": true,
+            "stock": 10,
+            "category": "E-cigs",
+            "thumbnails": [
+                "ruta1.jpg",
+                "ruta2.jpg"
+            ]
+        },
+        {
+            "id": "2",
+            "status": true,
+            "title": "Campera",
+            "description": "Camuflada estilo US Navy",
+            "code": "WDF9231",
+            "price": 1800,
+            "stock": 10,
+            "category": "Clothes",
+            "thumbnails": [
+                "ruta1.jpg",
+                "ruta2.jpg"
+            ]
+        },
+        {
+            "id": "3",
+            "status": true,
+            "title": "Camisa",
+            "price": "400",
+            "description": "Manga larga",
+            "category": "ropa",
+            "code": "LUT2310"
+        },
+        {
+            "id": "5",
+            "thumbnails": "http://localhost:8080/public/uploads/1705880628247 foto1.jpg",
+            "status": true,
+            "title": "hola",
+            "price": "100",
+            "description": "hola",
+            "category": "hola",
+            "code": "POW1232"
+        }
+    ]
+}

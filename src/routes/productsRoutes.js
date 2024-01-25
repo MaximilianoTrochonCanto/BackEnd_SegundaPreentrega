@@ -3,6 +3,7 @@ const path = require("path");
 const ProductManager = require("../productManager")
 const productos = require("../products.json");
 const { uploader } = require("../utils");
+const { title } = require("process");
 const router = Router()
 
 const manager = new ProductManager(path.join(__dirname, "../products.json"))
@@ -97,11 +98,35 @@ const manager = new ProductManager(path.join(__dirname, "../products.json"))
 
 router.put(`/:productId`, async(req, res) => {
     const productId = req.params.productId;    
-    const productouevo = req.body;
-    const newProduct = {
+    const productouevo = req.body;   
+    
+    let productoBuscado = await manager.getProductById(productId)
+    let newProduct = {
         id:productId,
-        ...productouevo
+        ...productoBuscado        
     }
+    
+    if(productouevo.title !== undefined)
+        newProduct.title = productouevo.title
+    
+    if(productouevo.description !== undefined)
+    newProduct.description = productouevo.description
+
+    if(productouevo.code !== undefined)
+    newProduct.code = productouevo.code
+
+    if(productouevo.price !== undefined)
+    newProduct.price = productouevo.price
+
+    if(productouevo.status !== undefined)
+    newProduct.status = productouevo.status
+
+    if(productouevo.category !== undefined)
+    newProduct.category = productouevo.category
+
+    if(productouevo.thumbnails !== undefined)
+    newProduct.thumbnails = productouevo.thumbnails
+                    
     await manager.updateProduct(productId,newProduct)
     res.json({
         ok:true,

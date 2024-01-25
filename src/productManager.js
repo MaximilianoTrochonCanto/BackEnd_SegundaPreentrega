@@ -56,7 +56,7 @@ class ProductManager{
         try{
         const todosLosProductos = require("./products.json");
         for(let i = 0;i<todosLosProductos.products.length;i++){
-            if(todosLosProductos.products[i].id === Number(id)){
+            if(Number(todosLosProductos.products[i].id) === Number(id)){
                 todosLosProductos.products.splice(i,1)
             }
         }

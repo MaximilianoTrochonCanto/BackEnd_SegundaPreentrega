@@ -1,1 +1,28 @@
-{"products":[{"id":"2","status":true,"title":"Campera","description":"Camuflada estilo US Navy","code":"WDF9231","price":1800,"stock":10,"category":"Clothes","thumbnails":["ruta1.jpg","ruta2.jpg"]},{"id":"3","status":true,"title":"Camisa","price":"400","description":"Manga larga","category":"ropa","code":"LUT2310"},{"id":"5","thumbnails":"http://localhost:8080/public/uploads/1705880628247 foto1.jpg","status":true,"title":"hola","price":"100","description":"hola","category":"hola","code":"POW1232"}]}
+{
+    "products": [
+        {
+            "id": "2",
+            "status": false,
+            "title": "Campera",
+            "description": "Camuflada estilo US Navy",
+            "code": "WDF9231",
+            "price": 1800,
+            "stock": 10,
+            "category": "Clothes",
+            "thumbnails": [
+                "ruta1.jpg",
+                "ruta2.jpg"
+            ]
+        },
+        {
+            "id": "5",
+            "thumbnails": "http://localhost:8080/public/uploads/1705880628247 foto1.jpg",
+            "status": true,
+            "title": "hola",
+            "price": "100",
+            "description": "hola",
+            "category": "hola",
+            "code": "POW1232"
+        }
+    ]
+}

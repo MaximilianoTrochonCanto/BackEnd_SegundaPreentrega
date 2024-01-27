@@ -14,48 +14,52 @@ const manager = new ProductManager(path.join(__dirname, "../products.json"))
 
     let result;
         router.get(`/`, async (req, res) => {
-            (req.query.limit>0)?result = await manager.getProducts().products.slice(0,req.query.limit):result = await manager.getProducts()             
-            return res.json({
-                ok: true,
-                products: result.products
-            });
+            try{                
+                (req.query.limit>0)?result = await manager.getProducts().products.slice(0,req.query.limit):result = await manager.getProducts()             
+                return res.json({
+                    ok: true,
+                    products: result.products
+                });
+            }catch(error){
+                return res.json({
+                    ok: false,
+                    products: error.message
+                });
+            }
         })
 
 
 
-
+     
     router.get(`/:productId`, async(req, res) => {
-        const productId = req.params.productId;
-        // if (isNaN(productId)) {
-        //     return res.status(400).json({
-        //         ok: true,
-        //         message: `No existe el producto con el id ${productId}`,
-        //         queryParams: req.query
-        //     })
-        // }
-        
-        
-        const producto = await manager.getProductById(productId)
-        if (!producto) {
-            return res.status(400).json({
-                ok: true,
-                message: `No existe el producto con el id ${productId}`,
-                queryParams: req.query
+       try{
+           const productId = req.params.productId;                   
+                   const producto = await manager.getProductById(productId)
+                   if (!producto) {
+                       return res.status(400).json({
+                           ok: true,
+                           message: `No existe el producto con el id ${productId}`,
+                           queryParams: req.query
+                        })
+                    }
+                                                                        
+                    return res.json({
+                        ok: true,
+                        product: producto
+                    });
+                }catch(error){
+                    return res.json({
+                        ok: false,
+                        product: error.message
+                    });
+                }
+
+                
             })
-        }
-
-
-        
-
-        return res.json({
-            ok: true,
-            product: producto
-        });
-    })
-    
-
-
-
+            
+            
+            
+            
 
 
 
@@ -97,6 +101,7 @@ const manager = new ProductManager(path.join(__dirname, "../products.json"))
 
 
 router.put(`/:productId`, async(req, res) => {
+    try{
     const productId = req.params.productId;    
     const productouevo = req.body;   
     
@@ -133,7 +138,12 @@ router.put(`/:productId`, async(req, res) => {
         message:"El producto fue actualizado",
         producto:newProduct
     })
-
+    }catch(error){
+        res.json({
+            ok:false,
+            message:error.message,            
+        })  
+    }
 })
 
 
@@ -141,12 +151,18 @@ router.put(`/:productId`, async(req, res) => {
 
 
         router.delete(`/:productId`, async(req, res) => {            
-            await manager.deleteProduct(req.params.productId) 
-            res.json({
-                ok:true,
-                message:"El producto fue Borrado"
+            try{
+                await manager.deleteProduct(req.params.productId) 
+                res.json({
+                    ok:true,
+                    message:"El producto fue Borrado"
+                })
+            }catch(error){
+                res.json({
+                    ok:false,
+                    message:error.message
+                })
             }
-            )
         })
 
 

@@ -7,6 +7,7 @@ const router = Router()
 
 const manager = new CartManager(path.join(__dirname, "../carts.json"))
 
+
 router.get(`/:cid`, async (req, res) => {
     try {
         const cartProds = await manager.getProducts(req.params.cid)

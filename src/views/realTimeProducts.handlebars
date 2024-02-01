@@ -1,0 +1,38 @@
+<h1>Alta de producto:</h1>
+<form id="formProd"  enctype="multipart/form-data">
+    <label for="txtTitle">Titulo:</label>
+    <input type="text" id="txtTitle" name="title"><br>
+    <label for="txtPrecio">Precio:</label>
+    <input type="number" id="txtPrecio" name="price"><br>
+    <label for="txtStock">Stock:</label>
+    <input type="number" id="txtStock" name="stock"><br>
+    <label for="txtDescription">Descripcion:</label>
+    <input type="text" id="txtDescription" name="description"><br>
+    <label for="txtCategory">Categoria:</label>
+    <input type="text" id="txtCategory" name="category"><br>
+    <label for="txtCode">Codigo:</label>
+    <input type="text" id="txtCode" name="code"><br>
+    <label for="txtThumbnail">Imagen:</label>
+    <input type="file" id="txtThumbnail" name="thumbnails"><br>
+    <input type="submit" value="Ingresar" id="btnIngresar">
+   </form> 
+    <input type="text" id="txtProductoBorrar" placeholder="id de producto">
+    <input type="button" value="Borrar" id="btnBorrar">
+   <p id="listaProductos"></p>
+
+   {{!-- <section>
+    {{#each products}}
+    <div>
+    <h2>Titulo: {{title}}</h2>
+    <h2>Descripcion: {{description}}</h2>
+    <h2>Categoria: {{category}}</h2>
+    <h2>Codigo: {{code}}</h2>
+    <h2>Precio: {{price}}</h2>
+    <h2>Stock: {{stock}}</h2>            
+    </div>
+    <hr>
+    {{/each}}
+   </section>  --}}
+
+
+

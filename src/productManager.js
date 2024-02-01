@@ -5,9 +5,13 @@ class ProductManager{
         this.pathDB = path;
     }
 
+    
+
+
     async createProduct(product){        
         const {titulo,descripcion,precio,thumbnail,stock,codigo} = product;
-        const allProducts = await this.getProducts(); 
+        const allProducts = await this.getProducts();
+
         allProducts.products.push(product);
         await fs.writeFile(this.pathDB,JSON.stringify(allProducts))                     
     }

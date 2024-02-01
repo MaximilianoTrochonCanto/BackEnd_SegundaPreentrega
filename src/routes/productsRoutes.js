@@ -2,12 +2,20 @@ const { Router } = require("express")
 const path = require("path");
 const ProductManager = require("../productManager")
 const productos = require("../products.json");
+const handlebars = require("express-handlebars")
 const { uploader } = require("../utils");
 const { title } = require("process");
 const router = Router()
+const express = require("express")
+const app = express()
+const io = require("../app")
+
 
 const manager = new ProductManager(path.join(__dirname, "../products.json"))
 
+app.engine("handlebars",handlebars.engine())
+app.set("views",path.join(__dirname,"/views"))
+app.set("view engine","handlebars")
 
 
 
@@ -16,6 +24,7 @@ const manager = new ProductManager(path.join(__dirname, "../products.json"))
         router.get(`/`, async (req, res) => {
             try{                
                 (req.query.limit>0)?result = await manager.getProducts().products.slice(0,req.query.limit):result = await manager.getProducts()             
+
                 return res.json({
                     ok: true,
                     products: result.products
@@ -74,25 +83,21 @@ const manager = new ProductManager(path.join(__dirname, "../products.json"))
             let newProduct;
             if(file){
                  newProduct = {
-                    id: (lastId + 1).toString(),
+                    id: (Number(lastId) + 1).toString(),
                     thumbnails: `http://localhost:8080/public/uploads/${file.filename}`,
                     status: true,
                     ...product
                 }
             }else{
                  newProduct = {
-                    id: (lastId + 1).toString(),                    
+                    id: (Number(lastId) + 1).toString(),                    
                     status: true,
                     ...product
                 }
             }
             if (newProduct.title != "" || newProduct.description != "" || newProduct.code != "" || newProduct.price != "") {
                 await manager.createProduct(newProduct)
-                res.json({
-                    ok: true,
-                    message: `Nuevo producto creado`,
-                    product: newProduct
-                })
+                
             }
         })
 
@@ -152,7 +157,8 @@ router.put(`/:productId`, async(req, res) => {
 
         router.delete(`/:productId`, async(req, res) => {            
             try{
-                await manager.deleteProduct(req.params.productId) 
+                await manager.deleteProduct(req.params.productId); 
+                
                 res.json({
                     ok:true,
                     message:"El producto fue Borrado"

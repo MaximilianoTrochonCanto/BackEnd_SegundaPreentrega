@@ -1,7 +1,7 @@
 {
     "products": [
         {
-            "id": "2",
+            "id": "1",
             "status": false,
             "title": "Campera",
             "description": "Camuflada estilo US Navy",
@@ -15,14 +15,34 @@
             ]
         },
         {
-            "id": "5",
-            "thumbnails": "http://localhost:8080/public/uploads/1705880628247 foto1.jpg",
+            "id": "2",
             "status": true,
-            "title": "hola",
-            "price": "100",
-            "description": "hola",
-            "category": "hola",
-            "code": "POW1232"
+            "title": "Album Duki",
+            "price": "120",
+            "stock": "20",
+            "description": "SSJ",
+            "category": "musica",
+            "code": "RTU7890"
+        },
+        {
+            "id": "3",
+            "status": true,
+            "title": "Hola",
+            "price": "",
+            "stock": "",
+            "description": "",
+            "category": "",
+            "code": ""
+        },
+        {
+            "id": "4",
+            "status": true,
+            "title": "Test10",
+            "price": "",
+            "stock": "",
+            "description": "",
+            "category": "",
+            "code": ""
         }
     ]
 }

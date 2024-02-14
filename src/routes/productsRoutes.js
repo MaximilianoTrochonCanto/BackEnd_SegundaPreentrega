@@ -1,6 +1,6 @@
 const { Router } = require("express")
 const path = require("path");
-const ProductManager = require("../productManager")
+const ProductManager = require("../dao/fileManagers/productManager")
 const productos = require("../products.json");
 const handlebars = require("express-handlebars")
 const { uploader } = require("../utils");
@@ -8,7 +8,9 @@ const { title } = require("process");
 const router = Router()
 const express = require("express")
 const app = express()
-const io = require("../app")
+const io = require("../app");
+const productsModel = require("../dao/model/products.models");
+const prodsData = require("../data/products");
 
 
 const manager = new ProductManager(path.join(__dirname, "../products.json"))
@@ -17,17 +19,27 @@ app.engine("handlebars",handlebars.engine())
 app.set("views",path.join(__dirname,"/views"))
 app.set("view engine","handlebars")
 
-
-
+router.get(`/insertion`,async(req,res) =>{
+    try{
+        let result = await productsModel.insertMany(prodsData)
+        return res.json({
+            message:"Massive insert successful",
+            products:result
+        }
+        )
+    }catch(err){
+        console.log(err)
+    }
+})
 
     let result;
         router.get(`/`, async (req, res) => {
             try{                
-                (req.query.limit>0)?result = await manager.getProducts().products.slice(0,req.query.limit):result = await manager.getProducts()             
+                (req.query.limit>0)?result = await productsModel.find().limit(req.query.limit):result = await productsModel.find()             
 
                 return res.json({
                     ok: true,
-                    products: result.products
+                    products: result
                 });
             }catch(error){
                 return res.json({
@@ -43,7 +55,9 @@ app.set("view engine","handlebars")
     router.get(`/:productId`, async(req, res) => {
        try{
            const productId = req.params.productId;                   
-                   const producto = await manager.getProductById(productId)
+                   const producto = await productsModel.find({
+                    _id:productId
+                   })
                    if (!producto) {
                        return res.status(400).json({
                            ok: true,
@@ -96,8 +110,8 @@ app.set("view engine","handlebars")
                 }
             }
             if (newProduct.title != "" || newProduct.description != "" || newProduct.code != "" || newProduct.price != "") {
-                await manager.createProduct(newProduct)
-                
+                //await manager.createProduct(newProduct)
+                productsModel.insertOne(newProduct)
             }
         })
 
@@ -110,38 +124,34 @@ router.put(`/:productId`, async(req, res) => {
     const productId = req.params.productId;    
     const productouevo = req.body;   
     
-    let productoBuscado = await manager.getProductById(productId)
-    let newProduct = {
-        id:productId,
-        ...productoBuscado        
-    }
+    let productoBuscado = productsModel.find({_id:productId})
     
     if(productouevo.title !== undefined)
-        newProduct.title = productouevo.title
+   await productsModel.updateOne({_id:productId}, {$set:{title:productouevo.title}})
     
     if(productouevo.description !== undefined)
-    newProduct.description = productouevo.description
+    await productsModel.updateOne({_id:productId}, {$set:{description:productouevo.description}})
 
     if(productouevo.code !== undefined)
-    newProduct.code = productouevo.code
+    await productsModel.updateOne({_id:productId}, {$set:{code:productouevo.code}})
 
     if(productouevo.price !== undefined)
-    newProduct.price = productouevo.price
+    await productsModel.updateOne({_id:productId}, {$set:{price:productouevo.price}})
 
     if(productouevo.status !== undefined)
-    newProduct.status = productouevo.status
+    await productsModel.updateOne({_id:productId}, {$set:{status:productouevo.status}})
 
     if(productouevo.category !== undefined)
-    newProduct.category = productouevo.category
+    await productsModel.updateOne({_id:productId}, {$set:{category:productouevo.category}})
 
     if(productouevo.thumbnails !== undefined)
-    newProduct.thumbnails = productouevo.thumbnails
-                    
-    await manager.updateProduct(productId,newProduct)
+    await productsModel.updateOne({_id:productId}, {$set:{thumbnails:productouevo.thumbnails}})
+    
+   // await manager.updateProduct(productId,newProduct)
     res.json({
         ok:true,
         message:"El producto fue actualizado",
-        producto:newProduct
+        producto: await productsModel.find({_id:productId})
     })
     }catch(error){
         res.json({
@@ -157,7 +167,8 @@ router.put(`/:productId`, async(req, res) => {
 
         router.delete(`/:productId`, async(req, res) => {            
             try{
-                await manager.deleteProduct(req.params.productId); 
+                await productsModel.deleteOne({_id:req.params.productId})
+               // await manager.deleteProduct(req.params.productId); 
                 
                 res.json({
                     ok:true,

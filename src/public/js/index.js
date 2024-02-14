@@ -11,6 +11,25 @@ const thumbnails = document.getElementById("txtThumbnails")
 const listaProductos = document.getElementById("listaProductos")
 const idProd = document.getElementById("txtProductoBorrar")
 const botonBorrar = document.getElementById("btnBorrar")
+const listaMensajes = document.getElementById("listaMensajes")
+const user = document.getElementById("userTxt")
+const message = document.getElementById("messageTxt")
+
+document.getElementById("btnIngresarMensaje").addEventListener("click",function(){    
+    socket.emit("newMessage",{
+        user:user.value,
+        message:message.value
+    })
+
+
+    socket.on("msg",(data) => {
+        listaMensajes.innerHTML = ""
+        data.forEach(m => listaMensajes.innerHTML += `${m.user} dijo: ${m.message} <br>`)
+        
+    })
+    
+})
+
 
 document.getElementById("formProd").addEventListener("submit",async (e) => {
     e.preventDefault();
@@ -48,6 +67,7 @@ socket.on("prod-logs",(data) => {
     }); 
 
 })
+
 
 botonBorrar.addEventListener("click",(e) =>{
     e.preventDefault()

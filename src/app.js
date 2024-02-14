@@ -7,8 +7,13 @@ const handlebars = require("express-handlebars")
 const path = require("path")
 const app = express()
 const PORT = 8080
+const mongoHOST = "localhost"
+const mongoPORT = 27017
+const mongoDB = "ecommerce"
 const fs = require("fs/promises")
-const ProductManager = require("./productManager")
+const mongoose = require("mongoose")
+const ProductManager = require("./dao/fileManagers/productManager")
+const messagesModel = require('./dao/model/messages.models')
 
 const pManager = new ProductManager(path.join(__dirname, "./products.json"))
 
@@ -37,7 +42,14 @@ app.use(`/${API_PREFIX}/products`,productsRoutes)
 app.use(`/${API_PREFIX}/carts`,cartsRoutes)
 app.use(`/`,viewsRoutes)
 
-
+const connection = mongoose.connect(
+    `mongodb+srv://MaxiTrochon:Solynico81**@cluster0.cdecepf.mongodb.net/ecommerce
+`
+).then((con) => {
+    console.log("Connected to mongo")
+}).catch((err) => {
+    console.log(err)
+})
 
 
 io.on("connection", async(socket) => {
@@ -63,6 +75,12 @@ io.on("connection", async(socket) => {
     })      
       
       
+    })
+
+
+    socket.on("newMessage",async(data) => {
+        await messagesModel.insertMany(data)        
+        io.emit("msg",await messagesModel.find())
     })
 
     socket.on("borrar-prod",async(data) => {    

@@ -4,7 +4,7 @@ const path = require("path");
 const CartManager = require("../dao/fileManagers/cartManager")
 const { uploader } = require("../utils");
 const cartsModel = require("../dao/model/carts.models");
-const productsModel = require("../dao/model/products.models");
+const productsModel = require("../model/products.models");
 const router = Router()
 
 const manager = new CartManager(path.join(__dirname, "../carts.json"))

@@ -9,7 +9,7 @@ const router = Router()
 const express = require("express")
 const app = express()
 const io = require("../app");
-const productsModel = require("../dao/model/products.models");
+const productsModel = require("../model/products.models");
 const prodsData = require("../data/products");
 
 
@@ -85,34 +85,39 @@ router.get(`/insertion`,async(req,res) =>{
             
 
 
-
+            
             router.post(`/`,uploader.single("thumbnails"),async(req, res) => {
             const prods = await manager.getProducts()
             const file = req.file;
             console.log(req.file)
             
             const product = req.body;
-            const lastId = prods.products[prods.products.length - 1].id
-            console.log(lastId)
-            let newProduct;
-            if(file){
-                 newProduct = {
-                    id: (Number(lastId) + 1).toString(),
-                    thumbnails: `http://localhost:8080/public/uploads/${file.filename}`,
-                    status: true,
-                    ...product
-                }
-            }else{
-                 newProduct = {
-                    id: (Number(lastId) + 1).toString(),                    
-                    status: true,
-                    ...product
-                }
-            }
-            if (newProduct.title != "" || newProduct.description != "" || newProduct.code != "" || newProduct.price != "") {
-                //await manager.createProduct(newProduct)
-                productsModel.insertOne(newProduct)
-            }
+            productsModel.insertMany(req.body)
+            res.json({
+                ok:true,
+                message:"Producto agregado exitosamente"
+            })
+
+            // const lastId = prods.products[prods.products.length - 1].id
+            // console.log(lastId)
+            // let newProduct;
+            // if(file){
+            //      newProduct = {
+            //         id: (Number(lastId) + 1).toString(),
+            //         thumbnails: `http://localhost:8080/public/uploads/${file.filename}`,
+            //         status: true,
+            //         ...product
+            //     }
+            // }else{
+            //      newProduct = {
+            //         id: (Number(lastId) + 1).toString(),                    
+            //         status: true,
+            //         ...product
+            //     }
+            // }
+            // if (newProduct.title != "" || newProduct.description != "" || newProduct.code != "" || newProduct.price != "") {
+            //     //await manager.createProduct(newProduct)
+            // }
         })
 
 
@@ -124,7 +129,6 @@ router.put(`/:productId`, async(req, res) => {
     const productId = req.params.productId;    
     const productouevo = req.body;   
     
-    let productoBuscado = productsModel.find({_id:productId})
     
     if(productouevo.title !== undefined)
    await productsModel.updateOne({_id:productId}, {$set:{title:productouevo.title}})

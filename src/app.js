@@ -14,7 +14,7 @@ const fs = require("fs/promises")
 const mongoose = require("mongoose")
 const ProductManager = require("./dao/fileManagers/productManager")
 const messagesModel = require('./dao/model/messages.models')
-const productsModel = require('./model/products.models')
+const productsModel = require('./dao/model/products.models')
 const { Console } = require('console')
 
 const pManager = new ProductManager(path.join(__dirname, "./products.json"))
@@ -26,11 +26,11 @@ const API_PREFIX = "api"
 
 
 
-app.get("/",async(req,res)=>{
-    const products = await productsModel.find()
-    console.log(products)
-    res.render("home",{ products })
-})
+// app.get("/products",async(req,res)=>{
+//     const products = await productsModel.find({}).lean()
+    
+//     res.render("products",{ products:products })
+// })
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))

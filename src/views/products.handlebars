@@ -1,0 +1,16 @@
+<h1>Lista de productos</h1>
+
+<div>
+{{#each products}} 
+
+<pre>{{title}}</pre>
+<pre>{{description}}</pre>
+<pre>${{price}}</pre>
+<form method="post" action="api/carts/65ccd6f1ba07c5963114dbf5/product/{{_id}}">
+
+<input type="submit" value="Agregar al carrito" name="AgregarAlCarrito" ></input>
+</form>
+<hr>
+{{/each}} 
+</div>
+

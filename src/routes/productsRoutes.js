@@ -9,7 +9,7 @@ const router = Router()
 const express = require("express")
 const app = express()
 const io = require("../app");
-const productsModel = require("../model/products.models");
+const productsModel = require("../dao/model/products.models");
 const prodsData = require("../data/products");
 
 
@@ -34,17 +34,44 @@ router.get(`/insertion`,async(req,res) =>{
 
     let result;
         router.get(`/`, async (req, res) => {
-            try{                
-                (req.query.limit>0)?result = await productsModel.find().limit(req.query.limit):result = await productsModel.find()             
-
+            try{
+                
+                const {page = 1,limit = 10,sort = "asc",category = "",available = false,price=0} = req.query                
+                                              
+                const {
+                    docs,
+                    totalDocs,
+                    limit:limitPag,                                        
+                    totalPages,
+                    hasPrevPage,
+                    hasNextPage,
+                    nextLink,
+                    prevLink,
+                    nextPage,
+                    prevPage
+                } =  await productsModel.paginate((category==="")?(available==="true")?{status:true}:{}:{category:category},{page,limit,sort:(sort === "desc")?{price:-1}:{price:1}})
+                
+                
+                
+                
                 return res.json({
-                    ok: true,
-                    products: result
+                    status: true,
+                    payload: docs,
+                    totalPages,
+                    prevPage,
+                    nextPage,
+                    page,
+                    hasPrevPage,
+                    hasNextPage,
+                    prevLink,
+                    nextLink
+                    // limit:limitPag,                                        
+                    // length:totalDocs,
                 });
             }catch(error){
                 return res.json({
-                    ok: false,
-                    products: error.message
+                    status: false,
+                    
                 });
             }
         })
@@ -92,10 +119,11 @@ router.get(`/insertion`,async(req,res) =>{
             console.log(req.file)
             
             const product = req.body;
-            productsModel.insertMany(req.body)
+            productsModel.create(product)
             res.json({
                 ok:true,
-                message:"Producto agregado exitosamente"
+                message:"Producto agregado exitosamente",
+                product:product
             })
 
             // const lastId = prods.products[prods.products.length - 1].id

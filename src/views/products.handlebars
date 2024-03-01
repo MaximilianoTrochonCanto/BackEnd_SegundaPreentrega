@@ -1,4 +1,4 @@
-<h1>Lista de productos</h1>
+<h1>Bienvenido {{user}}! Esta es tu lista de productos</h1>
 
 <div>
 {{#each products}} 
@@ -12,5 +12,9 @@
 </form>
 <hr>
 {{/each}} 
+<form action="/api/session/logout" method="post">
+    <input type="submit" value="Cerrar sesion" >
+
+</form>
 </div>
 

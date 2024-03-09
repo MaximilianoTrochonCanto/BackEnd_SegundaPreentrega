@@ -20,6 +20,9 @@ const ProductManager = require("./dao/fileManagers/productManager");
 const messagesModel = require("./dao/model/messages.models");
 const productsModel = require("./dao/model/products.models");
 const { Console } = require("console");
+const initializePassport = require("./config/passport.config");
+const passport = require("passport");
+
 
 const pManager = new ProductManager(path.join(__dirname, "./products.json"));
 
@@ -51,6 +54,11 @@ app.use(session({
     resave:true,
     saveUninitialized:true
 }))
+
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 console.log();

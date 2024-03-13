@@ -71,7 +71,7 @@ router.post("/registro", async (req, res) => {
         email: email,
         password: pwdHashed,
       });
-      req.session.user = req.user.name;
+      req.session.user = req.user;
       const prods = await productsModel.find().lean();
       res.redirect("/products");
     } else res.send({ error: "El mail ya existe" });

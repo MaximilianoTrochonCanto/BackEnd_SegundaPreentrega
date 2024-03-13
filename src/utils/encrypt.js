@@ -5,8 +5,8 @@ const createHash = async(psw) => {
     return await bcrypt.hashSync(psw,salt);
 }
 
-const isValidPassword = async(psw,encryptedPsw) => {
-    const isValid = await bcrypt.compareSync(psw,encryptedPsw);
+const isValidPassword = (psw,encryptedPsw) => {
+    const isValid = bcrypt.compareSync(psw,encryptedPsw);
     return isValid;
 }
 

@@ -38,8 +38,8 @@ router.get("/products", async (req, res) => {
   if (req.session.user === "CoderAdmin") req.session.admin = true;
 
   const prods = await productsModel.find().lean();
-  console.log("El user: " + req.session.user)
-  res.render("products", { products: prods, user: req.session.user });
+  
+  res.render("products", { products: prods, user: req.user.name });
 });
 
 router.get("/login", async (req, res) => {
@@ -51,10 +51,7 @@ router.post(
   passport.authenticate("login", {
     successRedirect: "/products",
     failureRedirect: "/failogin",
-    failureFlash: true,
-  }),async(req,res) => {
-    req.session.user = req.user.name 
-  }
+  })
   
 );
 router.get("/registro", async (req, res) => {
@@ -63,25 +60,25 @@ router.get("/registro", async (req, res) => {
 
 router.post(
   "/registro",
+  async(req,res) => {
+    req.session.user = req.user
+  },
   passport.authenticate("registro", {
     successRedirect: "/products",
-    failureRedirect: "/failregister",
-    failureFlash: true,
-  }),async(req,res) => {
-    req.session.user = req.user.name 
-  }
+    failureRedirect: "/failregister",  
+  })
 );
 
 
 router.get("/failregister", async (req, res) => {
-  res.send({ error: "Ocurrio un error!" });
+  res.render("registro",{ error: "Error. Revise que el correo no exista y ambas contraseñas coincidan." });
 });
 router.get("/failogin", async (req, res) => {
-  res.send({ error: "Ocurrio un error!" });
+  res.render("login",{ error: "El usuario o contraseña son incorrectos" });
 });
 router.get("/githubfailure", async (req, res) => {
   
-  res.send({ error: "Algo ta pasando con github 8=D" });
+  res.send({ error: "Algo esta pasando con github"  });
 });
 
 module.exports = router;

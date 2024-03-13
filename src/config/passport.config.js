@@ -18,7 +18,7 @@ const initializePassport = () => {
     async(accessToken,refreshToken,profile,done) => {
       try{
         let user = await userModel.findOne({email:profile.emails[0].value})
-        console.log(profile.emails[0].value)
+        
         if(!user){
           let addNewUser = {
             name:profile._json.name,
@@ -45,21 +45,20 @@ const initializePassport = () => {
         usernameField: "email",
       },
       async (req, res, username, done) => {
-        const { name, email, password } = req.body;
+        const { name, email, password, password2 } = req.body;
 
         try {
-          let user = await userModel.findOne({ email: username });
+          let user = await userModel.findOne({ email: email });
           console.log(email);
-          if (user) return done(null, false);
-
+          if (user || password!==password2) return done(null, false);          
           const pwdHashed = await createHash(password);
 
           const createOk = await userModel.create({
             name: name,
             email: email,
             password: pwdHashed,
-          });
-          req.session.user = name;
+          });          
+          req.session.user = name
           return done(null, createOk);
         } catch (error) {
           console.log("algo salio mal");
@@ -83,6 +82,7 @@ const initializePassport = () => {
 
           if (!isValidPassword(password, user.password))
             return done(null, false);
+            req.session.user = user.name          
           return done(null, user);
         } catch (error) {}
       }
